@@ -131,18 +131,18 @@ GLuint const kSCGLTexCoordPosition      = 3;
     
     //glBindAttribLocation(_shaderProgram, kSCGLNormalAttribPosition, "normal");
     //glBindAttribLocation(_shaderProgram, kSCGLTexCoordPosition,     "texcoord");
-    error = glGetError();
-    if (error != GL_NO_ERROR) {
-        NSLog(@"Error generated getting texcoord!");
-        
-        if (error == GL_INVALID_VALUE) {
-            NSLog(@"Invalid value");
-        } else if (error == GL_INVALID_OPERATION) {
-            NSLog(@"Invalid operation");
-        } else {
-            NSLog(@"unexpected error");
-        }
-    }
+//    error = glGetError();
+//    if (error != GL_NO_ERROR) {
+//        NSLog(@"Error generated getting texcoord!");
+//        
+//        if (error == GL_INVALID_VALUE) {
+//            NSLog(@"Invalid value");
+//        } else if (error == GL_INVALID_OPERATION) {
+//            NSLog(@"Invalid operation");
+//        } else {
+//            NSLog(@"unexpected error");
+//        }
+//    }
 
     glAttachShader(_shaderProgram, fragShader);
 
@@ -199,6 +199,8 @@ GLuint const kSCGLTexCoordPosition      = 3;
             
         }
         ok = NO;
+    } else {
+        NSLog(@"Found MVP Location");
     }
     return ok;
 }

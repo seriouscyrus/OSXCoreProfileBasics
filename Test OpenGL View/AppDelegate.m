@@ -26,7 +26,7 @@
         NSOpenGLPFADoubleBuffer,
         NSOpenGLPFABackingStore,
         NSOpenGLPFAAllowOfflineRenderers,
-        NSOpenGLPFAStencilSize, 8,
+        //NSOpenGLPFAStencilSize, 8,
         NSOpenGLPFAColorSize, 32,
         NSOpenGLPFADepthSize, 24,
         0

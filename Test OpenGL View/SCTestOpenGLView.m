@@ -21,14 +21,21 @@
     [super awakeFromNib];
     [self setPixelFormat:[AppDelegate defaultPixelFormat]];
     [self setOpenGLContext:[(AppDelegate *)[NSApp delegate] newSharedOpenGLContext]];
+    [self.openGLContext setView:self];
 }
 
 - (void)drawRect:(NSRect)dirtyRect {
     [super drawRect:dirtyRect];
+    if (self.openGLContext.view != self) {
+        NSLog(@"View mismatch");
+    }
+    //[self.openGLContext makeCurrentContext];
+    glViewport(0.0, 0.0, (GLint)self.bounds.size.width, (GLint)self.bounds.size.height);
 
     NSLog(@"Called");
     SCTestShader *testShader = [(AppDelegate *)[NSApp delegate] testShaderProgram];
     NSLog(@"Shader program = %i", testShader.shaderProgram);
+    
 
     glUseProgram(testShader.shaderProgram);
     glUniformMatrix4fv(testShader.mvpMatrixLocation, 1, GL_FALSE, _mvpMatrix.m);
@@ -39,7 +46,7 @@
 
     //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _testIBuffer);
     glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, 0);
-
+    //glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
     
     //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     glDisableVertexAttribArray(kSCGLColorAttribPosition);
@@ -47,36 +54,40 @@
     glBindVertexArray(0);
         
     glUseProgram(0);
-    CGLFlushDrawable(self.openGLContext.CGLContextObj);
+    [self.openGLContext flushBuffer];
+    //CGLFlushDrawable(self.openGLContext.CGLContextObj);
     // Drawing code here.
 }
 
 - (void) reshape
 {
     if (self.openGLContext) {
-        CGLContextObj cgl_ctx = CGLRetainContext(self.openGLContext.CGLContextObj);
-        CGLSetCurrentContext(cgl_ctx);
+        [self.openGLContext makeCurrentContext];
+        //CGLContextObj cgl_ctx = CGLRetainContext(self.openGLContext.CGLContextObj);
+        //CGLSetCurrentContext(cgl_ctx);
 //        _mvpMatrix = GLKMatrix4Identity;
-        _mvpMatrix = GLKMatrix4MakeOrtho(0.0, self.bounds.size.width, 0.0, self.bounds.size.height, 0.0, 100.0);
-//        _mvpMatrix = GLKMatrix4Multiply(
-//                                        GLKMatrix4MakeOrtho(0.0, self.bounds.size.width, 0.0, self.bounds.size.height, 0.0, 100.0),
-//                                        GLKMatrix4Identity);
+//        _mvpMatrix = GLKMatrix4MakeOrtho(0.0, self.bounds.size.width, 0.0, self.bounds.size.height, 0.0, 1.0);
+        _mvpMatrix = GLKMatrix4Multiply(
+                                        GLKMatrix4MakeOrtho(0.0, (GLint)self.bounds.size.width, 0.0, (GLint)self.bounds.size.height, 0.0, 100.0),
+                                        GLKMatrix4Identity);
         NSLog(@"Self.bounds = (%f, %f, %f, %f)", self.bounds.origin.x, self.bounds.origin.y, self.bounds.size.width, self.bounds.size.height);
+
         //        _mvpMatrix = GLKMatrix4MakeOrtho(0.0, self.bounds.size.width, 0.0, self.bounds.size.height, -1.0, 1.0);
         
-        //        NSLog(@"Matrix");
-        //        NSLog(@"%f, %f, %f, %f", _mvpMatrix.m00, _mvpMatrix.m01, _mvpMatrix.m02, _mvpMatrix.m03);
-        //        NSLog(@"%f, %f, %f, %f", _mvpMatrix.m10, _mvpMatrix.m11, _mvpMatrix.m12, _mvpMatrix.m13);
-        //        NSLog(@"%f, %f, %f, %f", _mvpMatrix.m20, _mvpMatrix.m21, _mvpMatrix.m22, _mvpMatrix.m23);
-        //        NSLog(@"%f, %f, %f, %f", _mvpMatrix.m30, _mvpMatrix.m31, _mvpMatrix.m32, _mvpMatrix.m33);
+//        NSLog(@"Matrix");
+//        NSLog(@"%f, %f, %f, %f", _mvpMatrix.m00, _mvpMatrix.m01, _mvpMatrix.m02, _mvpMatrix.m03);
+//        NSLog(@"%f, %f, %f, %f", _mvpMatrix.m10, _mvpMatrix.m11, _mvpMatrix.m12, _mvpMatrix.m13);
+//        NSLog(@"%f, %f, %f, %f", _mvpMatrix.m20, _mvpMatrix.m21, _mvpMatrix.m22, _mvpMatrix.m23);
+//        NSLog(@"%f, %f, %f, %f", _mvpMatrix.m30, _mvpMatrix.m31, _mvpMatrix.m32, _mvpMatrix.m33);
         
-        glViewport(self.bounds.origin.x, self.bounds.origin.y, self.bounds.size.width, self.bounds.size.height);
+        glViewport(0.0, 0.0, self.bounds.size.width, self.bounds.size.height);
+        
         
         glClearColor( 0.0, 0.0, 0.0, 0.0 );
         glClear( GL_COLOR_BUFFER_BIT );
         [self genTestVao];
         
-        CGLReleaseContext(cgl_ctx);
+        //CGLReleaseContext(cgl_ctx);
         [self.openGLContext update];
         self.needsDisplay = YES;
     }
@@ -86,15 +97,21 @@
 {
     // Generate buffers first to simulate app environment
     GLfloat verts[] = {
-        0.0,                    0.0,                        0.0, 1.0,
-        self.bounds.size.width, 0.0,                        0.0, 1.0,
-        0.0,                    self.bounds.size.height,    0.0, 1.0,
-        self.bounds.size.width, self.bounds.size.height,    0.0, 1.0
+        0.0f,                   0.0f,                       0.0f, 1.0f,
+        self.bounds.size.width, 0.0f,                       0.0f, 1.0f,
+        0.0f,                   self.bounds.size.height,    0.0f, 1.0f,
+        self.bounds.size.width, self.bounds.size.height,    0.0f, 1.0f
         
 //        0.0, 0.0, 0.0, 1.0,
 //        1.0, 0.0, 0.0, 1.0,
 //        0.0, 1.0, 0.0, 1.0,
 //        1.0, 1.0, 0.0, 1.0
+        
+//        -1.0, -1.0, 0.0, 1.0,
+//        1.0, -1.0, 0.0, 1.0,
+//        -1.0, 1.0, 0.0, 1.0,
+//        1.0, 1.0, 0.0, 1.0
+        
     };
     GLfloat colors[] = {
         1.0, 0.0, 0.0, 0.0,
@@ -103,7 +120,7 @@
         1.0, 1.0, 0.0, 0.0
     };
     
-    GLushort indices[] = {0,1,2,3};
+    GLushort indices[] = {0, 1, 2, 3};
     if (_testVBuffer) {
         glDeleteBuffers(1, &_testVBuffer);
     }
@@ -138,11 +155,12 @@
     glBindVertexArray(_testVAO);
     // Vertex
     glBindBuffer(GL_ARRAY_BUFFER, _testVBuffer);
-    glEnableVertexAttribArray(kSCGLVertexAttribPosition);
+    //glEnableVertexAttribArray(kSCGLVertexAttribPosition);
     glVertexAttribPointer(kSCGLVertexAttribPosition, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    
     // Colors
     glBindBuffer(GL_ARRAY_BUFFER, _testCBuffer);
-    glEnableVertexAttribArray(kSCGLColorAttribPosition);
+    //glEnableVertexAttribArray(kSCGLColorAttribPosition);
     glVertexAttribPointer(kSCGLColorAttribPosition, 4, GL_FLOAT, GL_FALSE, 0, 0);
     
     // Indices

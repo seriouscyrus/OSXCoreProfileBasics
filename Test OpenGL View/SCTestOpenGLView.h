@@ -7,6 +7,8 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import <OpenGL/OpenGL.h>
+#import <OpenGL/gl3.h>
 #import <GLKit/GLKit.h>
 
 @interface SCTestOpenGLView : NSOpenGLView

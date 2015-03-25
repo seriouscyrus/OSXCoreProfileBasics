@@ -1,6 +1,6 @@
 #version 150
 
-in vec4 vertex_color;
+in lowp vec4 vertex_color;
 
 out vec4 colourout;
 
