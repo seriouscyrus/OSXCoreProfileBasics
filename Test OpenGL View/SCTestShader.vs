@@ -10,6 +10,6 @@ out vec4 vertex_color;
 void main()
 {
     // perform standard transform on vertex
-    gl_Position = position * mvpMatrix;
+    gl_Position = mvpMatrix * position;
     vertex_color = color;
 }
