@@ -27,9 +27,12 @@
     [super drawRect:dirtyRect];
     NSLog(@"Called");
     SCTestShader *testShader = [(AppDelegate *)[NSApp delegate] testShaderProgram];
+    NSLog(@"Shader program = %i", testShader.shaderProgram);
+
     glUseProgram(testShader.shaderProgram);
     glUniformMatrix4fv(testShader.mvpMatrixLocation, 1, GL_FALSE, _mvpMatrix.m);
     
+    glBindVertexArray(_testVAO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _testIBuffer);
     glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, 0);
 
@@ -49,9 +52,11 @@
     if (self.openGLContext) {
         CGLContextObj cgl_ctx = CGLRetainContext(self.openGLContext.CGLContextObj);
         CGLSetCurrentContext(cgl_ctx);
+//        _mvpMatrix = GLKMatrix4Identity;
         _mvpMatrix = GLKMatrix4Multiply(
                                         GLKMatrix4MakeOrtho(0.0, self.bounds.size.width, 0.0, self.bounds.size.height, -1.0, 1.0),
                                         GLKMatrix4Identity);
+        NSLog(@"Self.bounds = (%f, %f, %f, %f)", self.bounds.origin.x, self.bounds.origin.y, self.bounds.size.width, self.bounds.size.height);
         //        _mvpMatrix = GLKMatrix4MakeOrtho(0.0, self.bounds.size.width, 0.0, self.bounds.size.height, -1.0, 1.0);
         
         //        NSLog(@"Matrix");
@@ -68,6 +73,7 @@
         
         CGLReleaseContext(cgl_ctx);
         [self.openGLContext update];
+        self.needsDisplay = YES;
     }
 }
 

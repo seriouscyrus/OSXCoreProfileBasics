@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>312B79F0-FA2C-4966-B0AC-3F3CA2BB06B7</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Test OpenGL View</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>686B4103D91C8E3C8F8C44AA10B4B14E0718E4B7</key>
+		<string>https://github.com/seriouscyrus/OSXCoreProfileBasics.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Test OpenGL View.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>686B4103D91C8E3C8F8C44AA10B4B14E0718E4B7</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/seriouscyrus/OSXCoreProfileBasics.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>686B4103D91C8E3C8F8C44AA10B4B14E0718E4B7</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>686B4103D91C8E3C8F8C44AA10B4B14E0718E4B7</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Test%20OpenGL%20View</string>
+		</dict>
+	</array>
+</dict>
+</plist>
