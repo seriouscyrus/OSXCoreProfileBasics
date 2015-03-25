@@ -25,6 +25,7 @@
 
 - (void)drawRect:(NSRect)dirtyRect {
     [super drawRect:dirtyRect];
+
     NSLog(@"Called");
     SCTestShader *testShader = [(AppDelegate *)[NSApp delegate] testShaderProgram];
     NSLog(@"Shader program = %i", testShader.shaderProgram);
@@ -33,15 +34,18 @@
     glUniformMatrix4fv(testShader.mvpMatrixLocation, 1, GL_FALSE, _mvpMatrix.m);
     
     glBindVertexArray(_testVAO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _testIBuffer);
+    glEnableVertexAttribArray(kSCGLVertexAttribPosition);
+    glEnableVertexAttribArray(kSCGLColorAttribPosition);
+
+    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _testIBuffer);
     glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, 0);
 
     
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glDisableVertexAttribArray(kSCGLColorAttribPosition);
+    glDisableVertexAttribArray(kSCGLVertexAttribPosition);
     glBindVertexArray(0);
-    
-    glBindTexture(GL_TEXTURE_RECTANGLE, 0);
-    
+        
     glUseProgram(0);
     CGLFlushDrawable(self.openGLContext.CGLContextObj);
     // Drawing code here.
@@ -53,9 +57,10 @@
         CGLContextObj cgl_ctx = CGLRetainContext(self.openGLContext.CGLContextObj);
         CGLSetCurrentContext(cgl_ctx);
 //        _mvpMatrix = GLKMatrix4Identity;
-        _mvpMatrix = GLKMatrix4Multiply(
-                                        GLKMatrix4MakeOrtho(0.0, self.bounds.size.width, 0.0, self.bounds.size.height, -1.0, 1.0),
-                                        GLKMatrix4Identity);
+        _mvpMatrix = GLKMatrix4MakeOrtho(0.0, self.bounds.size.width, 0.0, self.bounds.size.height, 0.0, 100.0);
+//        _mvpMatrix = GLKMatrix4Multiply(
+//                                        GLKMatrix4MakeOrtho(0.0, self.bounds.size.width, 0.0, self.bounds.size.height, 0.0, 100.0),
+//                                        GLKMatrix4Identity);
         NSLog(@"Self.bounds = (%f, %f, %f, %f)", self.bounds.origin.x, self.bounds.origin.y, self.bounds.size.width, self.bounds.size.height);
         //        _mvpMatrix = GLKMatrix4MakeOrtho(0.0, self.bounds.size.width, 0.0, self.bounds.size.height, -1.0, 1.0);
         
@@ -81,10 +86,15 @@
 {
     // Generate buffers first to simulate app environment
     GLfloat verts[] = {
-        0.0, 0.0, 0.0, 1.0,
-        100.0, 0.0, 0.0, 1.0,
-        0.0, 100.0, 0.0, 1.0,
-        100.0, 100.0, 0.0, 1.0
+        0.0,                    0.0,                        0.0, 1.0,
+        self.bounds.size.width, 0.0,                        0.0, 1.0,
+        0.0,                    self.bounds.size.height,    0.0, 1.0,
+        self.bounds.size.width, self.bounds.size.height,    0.0, 1.0
+        
+//        0.0, 0.0, 0.0, 1.0,
+//        1.0, 0.0, 0.0, 1.0,
+//        0.0, 1.0, 0.0, 1.0,
+//        1.0, 1.0, 0.0, 1.0
     };
     GLfloat colors[] = {
         1.0, 0.0, 0.0, 0.0,
@@ -93,7 +103,7 @@
         1.0, 1.0, 0.0, 0.0
     };
     
-    GLushort indices[] = {0, 1, 2, 3};
+    GLushort indices[] = {0,1,2,3};
     if (_testVBuffer) {
         glDeleteBuffers(1, &_testVBuffer);
     }
@@ -134,8 +144,12 @@
     glBindBuffer(GL_ARRAY_BUFFER, _testCBuffer);
     glEnableVertexAttribArray(kSCGLColorAttribPosition);
     glVertexAttribPointer(kSCGLColorAttribPosition, 4, GL_FLOAT, GL_FALSE, 0, 0);
+    
+    // Indices
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _testIBuffer);
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     NSLog(@"Generated New VAO");
 }
 
