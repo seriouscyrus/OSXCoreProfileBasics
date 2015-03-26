@@ -35,16 +35,9 @@
     glUniformMatrix4fv(testShader.mvpMatrixLocation, 1, GL_FALSE, _mvpMatrix.m);
     
     glBindVertexArray(_testVAO);
-    glEnableVertexAttribArray(kSCGLVertexAttribPosition);
-    glEnableVertexAttribArray(kSCGLColorAttribPosition);
 
-    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _testIBuffer);
     glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_SHORT, 0);
 
-    
-    //glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    glDisableVertexAttribArray(kSCGLColorAttribPosition);
-    glDisableVertexAttribArray(kSCGLVertexAttribPosition);
     glBindVertexArray(0);
         
     glUseProgram(0);
@@ -92,10 +85,6 @@
         0.0,                    self.bounds.size.height,    0.0, 1.0,
         self.bounds.size.width, self.bounds.size.height,    0.0, 1.0
         
-//        0.0, 0.0, 0.0, 1.0,
-//        1.0, 0.0, 0.0, 1.0,
-//        0.0, 1.0, 0.0, 1.0,
-//        1.0, 1.0, 0.0, 1.0
     };
     GLfloat colors[] = {
         1.0, 0.0, 0.0, 0.0,
@@ -139,11 +128,11 @@
     glBindVertexArray(_testVAO);
     // Vertex
     glBindBuffer(GL_ARRAY_BUFFER, _testVBuffer);
-    //glEnableVertexAttribArray(kSCGLVertexAttribPosition);
+    glEnableVertexAttribArray(kSCGLVertexAttribPosition);
     glVertexAttribPointer(kSCGLVertexAttribPosition, 4, GL_FLOAT, GL_FALSE, 0, 0);
     // Colors
     glBindBuffer(GL_ARRAY_BUFFER, _testCBuffer);
-    //glEnableVertexAttribArray(kSCGLColorAttribPosition);
+    glEnableVertexAttribArray(kSCGLColorAttribPosition);
     glVertexAttribPointer(kSCGLColorAttribPosition, 4, GL_FLOAT, GL_FALSE, 0, 0);
     
     // Indices
@@ -151,6 +140,8 @@
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    glDisableVertexAttribArray(kSCGLColorAttribPosition);
+    glDisableVertexAttribArray(kSCGLVertexAttribPosition);
     NSLog(@"Generated New VAO");
 }
 
