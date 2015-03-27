@@ -211,7 +211,7 @@
         float angle = 0;
         for (int col = 0; col < colVs; col++) {
             // Verts
-            NSLog(@"idx = %i", idx);
+            //NSLog(@"idx = %i", idx);
             angle = angle < minAngle ? minAngle : angle;
             vertCoords[idx++] = ((nearRf + (rowH * (float)row)) * cosf(angle)) + farf + outerOffsetf;
             vertCoords[idx++] = ((nearRf + (rowH * (float)row)) * sinf(angle)) + farf + outerOffsetf;
