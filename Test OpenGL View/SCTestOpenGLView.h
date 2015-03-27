@@ -17,6 +17,10 @@
     GLuint      _testCBuffer;
     GLuint      _testIBuffer;
     GLuint      _testVAO;
+    GLuint      _warpVBO;
+    GLuint      _warpVAO;
+    GLuint      _warpIndexBuffer;
+    GLuint      _warpIndexCount;
     GLKMatrix4  _mvpMatrix;
 }
 
